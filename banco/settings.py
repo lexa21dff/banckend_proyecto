@@ -83,7 +83,7 @@ WSGI_APPLICATION = 'banco.wsgi.application'
 DATABASES = {
 'default': {
     'ENGINE': 'django.db.backends.mysql',
-    'NAME': 'banco',
+    'NAME': 'proyectos',
     'USER': 'root',
     'PASSWORD': '',
     'HOST': '127.0.0.1',

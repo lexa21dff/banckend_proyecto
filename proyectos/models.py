@@ -151,15 +151,12 @@ class Categoria (models.Model):
     def __str__(self):
         return self.nombre
     
-class Grupo (models.Model):
-    nombre_grupo    = models.CharField(max_length=15, unique = True) # c+odigo auto generado por medio de un script 
 
-    def __str__(self):
-        return self.nombre_grupo
+
 
 class Inscrito (models.Model):
     estado        = models.CharField(max_length=30)
-    nombre_grupo        = models.ForeignKey(Grupo, on_delete = models.PROTECT)
+    # nombre_grupo        = models.ForeignKey(Grupo, on_delete = models.PROTECT)
     perfil          = models.ForeignKey(Perfil, on_delete = models.PROTECT)
     ficha           = models.ForeignKey(Ficha, on_delete = models.PROTECT)
     # proyecto        = models.IntegerField(null= True, blank= True) # consulta el id del Proyecto
@@ -168,10 +165,10 @@ class Inscrito (models.Model):
         return str(self.perfil)
     
 class Proyecto(models.Model):
+    #aprendiz                = models.ForeignKey(Inscrito, on_delete=models.CASCADE)
     nombre_proyecto     = models.CharField(max_length=300 )    
     descripcion         = models.CharField(max_length=5000 )    
     foto                = models.ImageField(upload_to='proyectos/foto', null=True, blank=True)
-    aprendiz                = models.ForeignKey(Inscrito, on_delete=models.CASCADE)
     codigo_fuente       = models.URLField(null= True, blank= True,)    
     categorias          = models.ManyToManyField(Categoria, null=True, blank=True)
 
@@ -184,6 +181,12 @@ class Proyecto(models.Model):
     def __str__(self):
         return self.nombre_proyecto
 
+class Grupo (models.Model):
+    nombre_grupo    = models.CharField(max_length=15, unique = True) # c+odigo auto generado por medio de un script 
+    integrantes              = models.ForeignKey(Inscrito, on_delete=models.CASCADE)
+    proyecto                = models.ForeignKey(Proyecto, null=True, blank=True, on_delete = models.PROTECT )
+    def __str__(self):
+        return self.proyecto.nombre_proyecto
 
 
 

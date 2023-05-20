@@ -3,7 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_GET
 from django.http import JsonResponse
 from django.contrib.auth.models import User
-from proyectos.models import Entrega, Proyecto,Inscrito, Perfil
+from proyectos.models import Entrega, Proyecto,Inscrito, Perfil, Grupo
 from proyectos.views.funciones import *
 
 
@@ -14,10 +14,12 @@ def entregas_por_usuario_proyecto(request, user_id):
 
     perfil_inscrito = perfil_conectado(user_id) #objeto
     # entregas_por_usuario = Entrega.objects.filter(aprendiz=perfil_inscrito, )[:10]  # limitamos a 10 entregas
+    proyectos_grupo = Grupo.objects.filter(integrantes__perfil_id=perfil_inscrito)
 
-    inscrito = Inscrito.objects.filter(perfil = perfil_inscrito) #lista
 
-    proyecto = Proyecto.objects.filter(aprendiz = perfil_inscrito) #lista
+    # inscrito = Inscrito.objects.filter(perfil = perfil_inscrito) #lista
+
+    # proyecto = Proyecto.objects.filter(aprendiz = inscrito) #lista
     
 
     # user = get_object_or_404(Inscrito, id=user_id)
@@ -27,7 +29,8 @@ def entregas_por_usuario_proyecto(request, user_id):
     data = {
         # 'entregas': list(entregas_por_usuario.values()),
         
-        'proyectos': list(proyecto.values())
+        'inscrito': list(proyectos_grupo.values()),
+
     }
 
     return JsonResponse(data)

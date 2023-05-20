@@ -8,5 +8,5 @@ class InscritoSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Inscrito
-        fields = ['id', 'estado', 'nombre_grupo', 'perfil', 'ficha']
+        fields = ['id', 'estado', 'perfil', 'ficha']
         # depth = 2
