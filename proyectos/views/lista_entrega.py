@@ -1,53 +1,22 @@
-from django.shortcuts import get_object_or_404
-from django.contrib.auth.decorators import login_required
-from django.views.decorators.http import require_GET
-from django.http import JsonResponse
-from django.contrib.auth.models import User
-from proyectos.models import Entrega, Proyecto,Inscrito, Perfil, Grupo
-from proyectos.views.funciones import *
+from rest_framework import viewsets
+from rest_framework import permissions
+from proyectos.serializers.lista_entregas import *
 
+from rest_framework import status
+from rest_framework.decorators import action
+from rest_framework.response import Response
 
+class ListaEntregaViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint that allows users to be viewed or edited.
+    """
+    queryset = Entrega.objects.all()
+    serializer_class = ListaEntregaSerializer
+    # permission_classes = [permissions.IsAuthenticated]
 
-# # @login_required
-@require_GET
-def entregas_por_usuario_proyecto(request, user_id):
-
-    perfil_inscrito = perfil_conectado(user_id) #objeto
-    # entregas_por_usuario = Entrega.objects.filter(aprendiz=perfil_inscrito, )[:10]  # limitamos a 10 entregas
-    proyectos_grupo = Grupo.objects.filter(integrantes__perfil_id=perfil_inscrito)
-
-
-    # inscrito = Inscrito.objects.filter(perfil = perfil_inscrito) #lista
-
-    # proyecto = Proyecto.objects.filter(aprendiz = inscrito) #lista
-    
-
-    # user = get_object_or_404(Inscrito, id=user_id)
-    # proyecto = get_object_or_404(Proyecto, id=proyecto_id)
-    # entregas = Entrega.objects.filter(aprendiz=inscrito, proyecto=proyecto)[:10]  # limitamos a 10 entregas
-
-    data = {
-        # 'entregas': list(entregas_por_usuario.values()),
-        
-        'inscrito': list(proyectos_grupo.values()),
-
-    }
-
-    return JsonResponse(data)
-
-# def entregas_por_usuario_proyecto(request, user_id, proyecto_id):
-
-#     user = get_object_or_404(User, id=user_id)
-#     perfil = get_object_or_404(Perfil, usuario=user)
-#     proyecto = get_object_or_404(Proyecto, id=proyecto_id)
-#     inscrito = Inscrito.objects.filter(perfil = perfil) #lista
-#     entregas = Entrega.objects.filter(aprendiz=inscrito, proyecto=proyecto)[:10]  # limitamos a 10 entregas
-
-#     data = {
-#         'inscritos': list(inscrito.values()),
-#         'entregas': list(entregas.values()),
-
-
-#     }
-
-#     return JsonResponse(data)
+    @action(detail=True, methods=['get'])
+    def get_entregas_por_proyecto(self, request, *args, **kwargs):
+        id_proyecto = kwargs['id_proyecto']
+        entregas = Entrega.objects.filter(proyecto=id_proyecto)
+        serializer = ListaEntregaSerializer(entregas, many=True)
+        return Response(serializer.data)
