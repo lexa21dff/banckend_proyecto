@@ -184,7 +184,7 @@ class Proyecto(models.Model):
 class Grupo (models.Model):
     nombre_grupo    = models.CharField(max_length=15, unique = True) # c+odigo auto generado por medio de un script 
     # creador_grupo    = models.IntegerField() # id del creador del grupo 
-    integrantes              = models.ForeignKey(Inscrito, on_delete=models.CASCADE)
+    integrantes              = models.ManyToManyField(Inscrito)
     proyecto                = models.ForeignKey(Proyecto, null=True, blank=True, on_delete = models.PROTECT )
     def __str__(self):
         return self.proyecto.nombre_proyecto
