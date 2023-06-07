@@ -19,6 +19,7 @@ from proyectos.views.login import UserLoginAPIView
 from proyectos.views.signup import UserSignUpAPIView
 from proyectos.views.lista_proyecto import entregas_por_usuario_proyecto
 from proyectos.views.lista_entrega import *
+from proyectos.views.lista_inscritos import *
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -28,6 +29,7 @@ urlpatterns = [
     path('api/signup/', UserSignUpAPIView.as_view(), name='login'),
     path('api/proyectos/<int:user_id>/', entregas_por_usuario_proyecto, name='entregas_por_usuario_proyecto'),
     path('api/entregas/<int:id_proyecto>/', ListaEntregaViewSet.as_view({'get': 'get_entregas_por_proyecto'}), name='lista_entregas_por_proyecto'),
+    path('api/inscritos/<int:id_user>/', ListaInscritosViewSet.as_view({'get': 'get_inscritos'}), name='lista_entregas_por_proyecto'),
 
 ]
 
